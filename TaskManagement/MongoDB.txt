@@ -1,0 +1,11 @@
+Email: younes.erraji8@gmail.com
+Password: YouERR20+
+
+Project Name: TaskManagement
+Cluster Name: TaskManagementCluster
+Username: task-management
+Password: ocpravlTwTqw5kgB
+Database name: TaskManagementDB
+Collection name: TaskManagementCollection
+
+Connection: mongodb+srv://task-management:<password>@taskmanagementcluster.tf3kovv.mongodb.net/?retryWrites=true&w=majority

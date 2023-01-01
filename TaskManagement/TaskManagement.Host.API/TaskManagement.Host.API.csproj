@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TaskManagement.Business\TaskManagement.Business.csproj" />
+    <ProjectReference Include="..\TaskManagement.Data\TaskManagement.Data.csproj" />
+    <ProjectReference Include="..\TaskManagement.Notifier\TaskManagement.Notifier.csproj" />
+    <ProjectReference Include="..\TaskManagement.Scheduler\TaskManagement.Scheduler.csproj" />
+    <ProjectReference Include="..\TaskManagement.Services.Contract\TaskManagement.Services.Contract.csproj" />
+    <ProjectReference Include="..\TaskManagement.Services.EF\TaskManagement.Services.EF.csproj" />
+    <ProjectReference Include="..\TaskManagement.Services.Mongo\TaskManagement.Services.Mongo.csproj" />
+  </ItemGroup>
+
+</Project>

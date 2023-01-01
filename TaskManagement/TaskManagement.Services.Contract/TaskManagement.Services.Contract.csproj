@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="EF\**" />
+    <Compile Remove="Mongo\**" />
+    <EmbeddedResource Remove="EF\**" />
+    <EmbeddedResource Remove="Mongo\**" />
+    <None Remove="EF\**" />
+    <None Remove="Mongo\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TaskManagement.Data\TaskManagement.Data.csproj" />
+  </ItemGroup>
+
+</Project>

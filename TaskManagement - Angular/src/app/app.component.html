@@ -1,0 +1,84 @@
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand"
+      ><img src="../assets/logo.png" alt="" height="40"
+    /></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            routerLink="/tasks"
+            routerLinkActive="router-link-active"
+            >Tasks</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            routerLink="/students"
+            routerLinkActive="router-link-active"
+            >Students</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            routerLink="/teachers"
+            routerLinkActive="router-link-active"
+            >Teachers</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
+<div class="container">
+  <footer class="py-3 my-4">
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+      <li class="nav-item">
+        <a
+          routerLink="/tasks"
+          routerLinkActive="router-link-active"
+          class="nav-link px-2 text-muted"
+          >Tasks</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          routerLink="/students"
+          routerLinkActive="router-link-active"
+          class="nav-link px-2 text-muted"
+          >Students</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          routerLink="/teachers"
+          routerLinkActive="router-link-active"
+          class="nav-link px-2 text-muted"
+          >Teachers</a
+        >
+      </li>
+    </ul>
+    <p class="text-center text-muted">© 2021 Company, Inc</p>
+  </footer>
+</div>
