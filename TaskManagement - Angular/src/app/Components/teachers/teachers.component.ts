@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import Swal from 'sweetalert2';
+import axios from 'axios';
 
 interface Teacher {
   id: string;
@@ -9,57 +11,109 @@ interface Teacher {
 
 @Component({
   selector: 'app-teachers',
-  templateUrl: './teachers.component.html',
+  templateUrl: './teachers.component.html'
 })
-export class TeachersComponent implements OnInit {
-  teachers: Array<Teacher> = [
-    {
-      id: 'arti',
-      name: 'Younes',
-      birthDate: 'date',
-      mainSubjectTeaching: 'Math 1',
-    },
-    {
-      id: 'arti4',
-      name: 'Younes',
-      birthDate: 'date',
-      mainSubjectTeaching: 'Math 3',
-    },
-    {
-      id: 'arti7',
-      name: 'Younes',
-      birthDate: 'date',
-      mainSubjectTeaching: 'Math 7',
-    },
-  ];
+export class TeachersComponent {
+  teachers: Array<Teacher> = [];
 
-  id: string = '';
-  name: string = '';
-  birthDate: string = '';
-  mainSubjectTeaching: string = '';
+  teacher: Teacher = {
+    id: '',
+    name: '',
+    birthDate: '',
+    mainSubjectTeaching: '',
+  }
 
-  constructor() {}
+  teacherToUpdate: Teacher = {
+    id: '',
+    name: '',
+    birthDate: '',
+    mainSubjectTeaching: '',
+  }
 
-  ngOnInit(): void {}
+  selectedTeacher: string = '';
 
-  track(index: number, teacher: Teacher) {
-    return teacher.id;
+  constructor() {
+    this.getTeachers()
+  }
+
+  getTeachers() {
+    axios.get('https://localhost:7240/api/Teachers').then(({data}) => {
+      this.teachers = [];
+      data.forEach((s:Teacher) => {
+        this.teachers.push(s)
+      });
+    }).catch((error:any) => console.log(error))
+  }
+
+  emptyTeacherObject(): Teacher {
+    return {
+      id: '',
+      name: '',
+      birthDate: '',
+      mainSubjectTeaching: '',
+    }
   }
 
   addTeacher(e: any) {
-    console.log(e);
-    // e.preventDefault();
+    axios.post('https://localhost:7240/api/Teachers/insert', {
+      ...this.teacher
+    }).then((response:any) => response.data).then((data:any) => {
 
-    console.log(this.name);
-    console.log(this.birthDate);
-    console.log(this.mainSubjectTeaching);
+      this.teacher = this.emptyTeacherObject();
+      Swal.fire(
+        'Teacher',
+        'Teacher was Successfully Inserted.',
+        'success'
+      );
+
+      this.getTeachers();
+    })
   }
 
   updateTeacher(e: any) {
-    console.log(e);
+    axios.put(`https://localhost:7240/api/Teachers/${this.teacherToUpdate.id}/edit`, {
+      ...this.teacherToUpdate
+    }).then(({data}) => {
+      Swal.fire(
+        'Teacher was Successfully DELETED!',
+        '',
+        'warning'
+      );
+
+      this.getTeachers();
+    }).catch(error => console.log(error))
   }
 
-  deleteTeacher(e: any) {
-    console.log(e);
+  deleteTeacher(id: string) {
+
+    Swal.fire({
+      title: 'Sure you want to DELETE this Teacher?',
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      denyButtonText: `Don't save`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`https://localhost:7240/api/Teachers/${id}/delete`)
+          .then(({data}) => {
+            Swal.fire(
+              'Teacher was Successfully DELETED!',
+              '',
+              'warning'
+            );
+
+            this.getTeachers();
+          })
+          .catch(error => console.log(error))
+      }
+    })
   }
+
+  getTeacher(id: string):Teacher|any {
+    axios.get(`https://localhost:7240/api/Teachers/${id}/get`)
+    .then(({data}) => {
+      console.log(data)
+      this.teacherToUpdate = data
+    }).catch(error => console.log(error))
+  }
+
 }

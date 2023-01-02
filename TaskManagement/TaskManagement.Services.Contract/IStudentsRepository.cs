@@ -3,14 +3,15 @@ using TaskManagement.Data.Models;
 
 namespace TaskManagement.Services.Contract
 {
-    public interface IStudentsRepository
-    {
-        List<Student> GetStudents();
-        Student CreateStudent(StudentVM student);
-        int DeleteStudent(Guid studentId);
-        Student EditStudent(StudentVM student, Guid studentId);
+  public interface IStudentsRepository
+  {
+    List<Student> GetStudents();
+    Student GetStudent(Guid studentId);
+    Student CreateStudent(StudentVM student);
+    int DeleteStudent(Guid studentId);
+    Student EditStudent(StudentVM student, Guid studentId);
 
-        void CreateStudents(List<Student> students);
-        void DeleteStudents();
-    }
+    void CreateStudents(List<Student> students);
+    void DeleteStudents();
+  }
 }

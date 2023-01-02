@@ -16,24 +16,24 @@ ConfigurationManager configuration = builder.Configuration;
 
 if (configuration["MainDatabase"] == "SQLServer")
 {
-    builder.Services.AddDbContext<TaskManagementDBContext>(options => options.UseSqlServer(configuration.GetConnectionString("SQLServer")));
+  builder.Services.AddDbContext<TaskManagementDBContext>(options => options.UseSqlServer(configuration.GetConnectionString("SQLServer")));
 
-    builder.Services.AddScoped<IStudentsRepository, TaskManagement.Services.EF.Repositories.StudentsRepository>();
-    builder.Services.AddScoped<ITeachersRepository, TaskManagement.Services.EF.Repositories.TeachersRepository>();
-    builder.Services.AddScoped<ITaskRepository, TaskManagement.Services.EF.Repositories.TaskRepository>();
+  builder.Services.AddScoped<IStudentsRepository, TaskManagement.Services.EF.Repositories.StudentsRepository>();
+  builder.Services.AddScoped<ITeachersRepository, TaskManagement.Services.EF.Repositories.TeachersRepository>();
+  builder.Services.AddScoped<ITaskRepository, TaskManagement.Services.EF.Repositories.TaskRepository>();
 }
 else
 {
-    // Mongo Services:
-    builder.Services.Configure<TaskManagementDatabaseSettings>(configuration.GetSection(nameof(TaskManagementDatabaseSettings)));
+  // Mongo Services:
+  builder.Services.Configure<TaskManagementDatabaseSettings>(configuration.GetSection(nameof(TaskManagementDatabaseSettings)));
 
-    builder.Services.AddSingleton<ITaskManagementDatabaseSettings>(s => s.GetRequiredService<IOptions<TaskManagementDatabaseSettings>>().Value);
+  builder.Services.AddSingleton<ITaskManagementDatabaseSettings>(s => s.GetRequiredService<IOptions<TaskManagementDatabaseSettings>>().Value);
 
-    builder.Services.AddSingleton<IMongoClient>(s => new MongoClient(configuration.GetValue<string>("TaskManagementDatabaseSettings:URI")));
+  builder.Services.AddSingleton<IMongoClient>(s => new MongoClient(configuration.GetValue<string>("TaskManagementDatabaseSettings:URI")));
 
-    builder.Services.AddScoped<IStudentsRepository, TaskManagement.Services.Mongo.Repositories.StudentsRepository>();
-    builder.Services.AddScoped<ITeachersRepository, TaskManagement.Services.Mongo.Repositories.TeachersRepository>();
-    builder.Services.AddScoped<ITaskRepository, TaskManagement.Services.Mongo.Repositories.TasksRepository>();
+  builder.Services.AddScoped<IStudentsRepository, TaskManagement.Services.Mongo.Repositories.StudentsRepository>();
+  builder.Services.AddScoped<ITeachersRepository, TaskManagement.Services.Mongo.Repositories.TeachersRepository>();
+  builder.Services.AddScoped<ITaskRepository, TaskManagement.Services.Mongo.Repositories.TasksRepository>();
 }
 
 builder.Services.AddScoped<ITaskManagementService, TaskManagementService>();
@@ -42,12 +42,12 @@ builder.Services.AddScoped<ITaskScheduler, TaskManagement.Scheduler.TaskSchedule
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllHeaders", b =>
-    {
-        b.AllowAnyOrigin();
-        b.AllowAnyHeader();
-        b.AllowAnyMethod();
-    });
+  options.AddPolicy("AllowAllHeaders", b =>
+  {
+    b.AllowAnyOrigin();
+    b.AllowAnyHeader();
+    b.AllowAnyMethod();
+  });
 });
 
 builder.Services.AddControllers();
@@ -60,8 +60,8 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+  app.UseSwagger();
+  app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
@@ -69,6 +69,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.MapHub<TaskManagementNotifier>("/task-management");
 app.Run();

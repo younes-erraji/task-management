@@ -11,7 +11,7 @@
         data-bs-toggle="modal"
         data-bs-target="#createTaskModal"
       >
-        Create a task
+        Create a Task
       </button>
     </div>
   </div>
@@ -20,33 +20,22 @@
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
+        <th scope="col">Name</th>
+        <th scope="col">Table Name</th>
+        <th scope="col">Action Type</th>
         <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td><button class="btn btn-success btn-sm">Execute</button></td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-        <td><button class="btn btn-success btn-sm">Execute</button></td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td colspan="2">Larry the Bird</td>
-        <td>@twitter</td>
+      <tr *ngFor="let task of tasks; index as i">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ task.name }}</td>
+        <td>{{ task.tableName }}</td>
+        <td>{{ task.actionType }}</td>
         <td>
-          <button class="btn btn-success btn-sm">Execute</button>
+          <button class="btn btn-info btn-sm" (click)="executeTask(task.id)">
+            Execute
+          </button>
         </td>
       </tr>
     </tbody>
@@ -64,19 +53,19 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td><button class="btn btn-warning">Running</button></td>
-      </tr>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td><button class="btn btn-success">Completed</button></td>
+      <tr *ngFor="let task of tasksExecution; index as i">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ task.task?.name }}</td>
+        <td>{{ task.taskStartDate }}</td>
+        <td>{{ task.taskEndDate }}</td>
+        <td>
+          <button *ngIf="task.taskEndDate" class="btn btn-success">
+            Completed
+          </button>
+          <button *ngIf="!task.taskEndDate" class="btn btn-warning">
+            Running
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -105,48 +94,35 @@
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label"
-                >Email address</label
-              >
+              <label class="form-label">Name</label>
               <input
                 class="form-control"
                 type="text"
-                value="Readonly input here..."
-                aria-label="readonly input example"
+                aria-label="readonly input"
+                [value]="name"
                 readonly
               />
             </div>
             <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label"
-                >Email address</label
+              <label class="form-label">Table Name</label>
+              <select
+                class="form-select"
+                name="tableName"
+                [(ngModel)]="tableName"
               >
-              <input
-                type="email"
-                class="form-control"
-                id="exampleFormControlInput1"
-                placeholder="name@example.com"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label"
-                >Email address</label
-              >
-              <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option value="students">Students</option>
+                <option value="teachers">Teachers</option>
               </select>
             </div>
             <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label"
-                >Email address</label
+              <label class="form-label">Action Type</label>
+              <select
+                class="form-select"
+                name="actionType"
+                [(ngModel)]="actionType"
               >
-              <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option value="purge">Purge</option>
+                <option value="initialize">Initialize</option>
               </select>
             </div>
           </form>
@@ -159,10 +135,16 @@
           >
             Close
           </button>
-          <button type="button" class="btn btn-primary">Understood</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="addTask($event)"
+            data-bs-dismiss="modal"
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>
   </div>
-  <!-- <modal-component></modal-component> -->
 </div>

@@ -22,28 +22,28 @@
         <th scope="col">#</th>
         <th scope="col">Name</th>
         <th scope="col">Birth Date</th>
-        <th scope="col">Main Subject</th>
+        <th scope="col">Main Subject Teaching</th>
         <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let teacher of teachers; index as i; trackBy: track">
-        <th scope="row">{{ i }}</th>
+      <tr *ngFor="let teacher of teachers; index as i">
+        <th scope="row">{{ i + 1 }}</th>
         <td>{{ teacher.name }}</td>
         <td>{{ teacher.birthDate }}</td>
         <td>{{ teacher.mainSubjectTeaching }}</td>
         <td>
           <button
-            class="btn btn-primary btn-sm"
-            title="{{ teacher.id }}"
-            (click)="updateTeacher($event)"
+            class="btn btn-primary btn-sm mx-2"
+            data-bs-toggle="modal"
+            data-bs-target="#updateTeacherModal"
+            (click)="getTeacher(teacher.id)"
           >
             Update
           </button>
           <button
-            class="btn btn-danger btn-sm"
-            title="{{ teacher.id }}"
-            (click)="deleteTeacher($event)"
+            class="btn btn-danger btn-sm mx-2"
+            (click)="deleteTeacher(teacher.id)"
           >
             Delete
           </button>
@@ -52,7 +52,7 @@
     </tbody>
   </table>
 
-  <!-- Modal -->
+  <!-- Insert Modal -->
   <div
     class="modal fade"
     id="createTeacherModal"
@@ -76,15 +76,14 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form (submit)="addTeacher($event)">
+          <form>
             <div class="mb-3">
               <label class="form-label">Name</label>
               <input
                 class="form-control"
                 type="text"
-                [value]="name"
-                #nameInput
-                (input)="name = nameInput.value"
+                name="name"
+                [(ngModel)]="teacher.name"
               />
             </div>
             <div class="mb-3">
@@ -92,9 +91,8 @@
               <input
                 type="date"
                 class="form-control"
-                [value]="birthDate"
-                #birthDateInput
-                (input)="birthDate = birthDateInput.value"
+                name="birthDate"
+                [(ngModel)]="teacher.birthDate"
               />
             </div>
             <div class="mb-3">
@@ -102,9 +100,8 @@
               <input
                 type="text"
                 class="form-control"
-                [value]="mainSubjectTeaching"
-                #mainSubjectTeachingInput
-                (input)="mainSubjectTeaching = mainSubjectTeachingInput.value"
+                name="mainSubjectTeaching"
+                [(ngModel)]="teacher.mainSubjectTeaching"
               />
             </div>
           </form>
@@ -117,7 +114,94 @@
           >
             Close
           </button>
-          <button type="button" class="btn btn-primary">Save</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="addTeacher($event)"
+            data-bs-dismiss="modal"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update Modal -->
+  <div
+    class="modal fade"
+    id="updateTeacherModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="updateTeacherModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateTeacherModalLabel">
+            Update Teacher
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <input
+              type="hidden"
+              name="selectedTeacher"
+              [(ngModel)]="selectedTeacher"
+            />
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input
+                class="form-control"
+                type="text"
+                name="teacherToUpdateName"
+                [(ngModel)]="teacherToUpdate.name"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Birth Date</label>
+              <input
+                type="date"
+                class="form-control"
+                name="teacherToUpdatBbirthDate"
+                [(ngModel)]="teacherToUpdate.birthDate"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Main Subject Teaching</label>
+              <input
+                type="text"
+                class="form-control"
+                name="teacherToUpdateMainSubjectTeaching"
+                [(ngModel)]="teacherToUpdate.mainSubjectTeaching"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="updateTeacher($event)"
+            data-bs-dismiss="modal"
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>

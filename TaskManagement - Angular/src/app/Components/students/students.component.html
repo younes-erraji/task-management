@@ -27,23 +27,23 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let student of students; index as i; trackBy: track">
-        <th scope="row">{{ i }}</th>
+      <tr *ngFor="let student of students; index as i">
+        <th scope="row">{{ i + 1 }}</th>
         <td>{{ student.name }}</td>
         <td>{{ student.birthDate }}</td>
         <td>{{ student.yearOfStudy }}</td>
         <td>
           <button
-            class="btn btn-primary btn-sm"
-            [title]="student.id"
-            (click)="updateStudent($event)"
+            class="btn btn-primary btn-sm mx-2"
+            data-bs-toggle="modal"
+            data-bs-target="#updateStudentModal"
+            (click)="getStudent(student.id)"
           >
             Update
           </button>
           <button
-            class="btn btn-danger btn-sm"
-            [title]="student.id"
-            (click)="deleteStudent($event)"
+            class="btn btn-danger btn-sm mx-2"
+            (click)="deleteStudent(student.id)"
           >
             Delete
           </button>
@@ -76,15 +76,14 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form #addStudentForm (submit)="addStudent($event)">
+          <form>
             <div class="mb-3">
               <label class="form-label">Name</label>
               <input
                 class="form-control"
                 type="text"
-                [value]="name"
-                #nameInput
-                (input)="name = nameInput.value"
+                name="name"
+                [(ngModel)]="student.name"
               />
             </div>
             <div class="mb-3">
@@ -92,9 +91,8 @@
               <input
                 type="date"
                 class="form-control"
-                [value]="birthDate"
-                #birthDateInput
-                (input)="birthDate = birthDateInput.value"
+                name="birthDate"
+                [(ngModel)]="student.birthDate"
               />
             </div>
             <div class="mb-3">
@@ -102,9 +100,8 @@
               <input
                 type="number"
                 class="form-control"
-                [value]="yearOfStudy"
-                #yearOfStudyInput
-                (input)="yearOfStudy = parseStringToInt(yearOfStudyInput.value)"
+                name="yearOfStudy"
+                [(ngModel)]="student.yearOfStudy"
               />
             </div>
           </form>
@@ -117,7 +114,94 @@
           >
             Close
           </button>
-          <button type="button" class="btn btn-primary">Save</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="addStudent($event)"
+            data-bs-dismiss="modal"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update Modal -->
+  <div
+    class="modal fade"
+    id="updateStudentModal"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="updateStudentModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateStudentModalLabel">
+            Update Student
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <input
+              type="hidden"
+              name="selectedStudent"
+              [(ngModel)]="selectedStudent"
+            />
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input
+                class="form-control"
+                type="text"
+                name="studentToUpdateName"
+                [(ngModel)]="studentToUpdate.name"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Birth Date</label>
+              <input
+                type="date"
+                class="form-control"
+                name="studentToUpdatBbirthDate"
+                [(ngModel)]="studentToUpdate.birthDate"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Year Of Study</label>
+              <input
+                type="number"
+                class="form-control"
+                name="studentToUpdateYearOfStudy"
+                [(ngModel)]="studentToUpdate.yearOfStudy"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="updateStudent($event)"
+            data-bs-dismiss="modal"
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>
