@@ -10,10 +10,11 @@ namespace TaskManagement.Services.Mongo.Repositories
     public class StudentsRepository : IStudentsRepository
     {
         private readonly IMongoCollection<Student> _students;
+
         public StudentsRepository(ITaskManagementDatabaseSettings settings, IMongoClient mongoClient)
         {
             IMongoDatabase database = mongoClient.GetDatabase(settings.DatabaseName);
-            _students = database.GetCollection<Student>(settings.CollectionName);
+            _students = database.GetCollection<Student>("Students");
         }
 
         public Student CreateStudent(StudentVM studentVM)

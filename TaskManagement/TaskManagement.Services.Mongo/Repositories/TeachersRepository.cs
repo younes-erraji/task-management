@@ -7,13 +7,13 @@ using TaskManagement.Data.Models;
 
 namespace TaskManagement.Services.Mongo.Repositories
 {
-    public class TeachersRepository: ITeachersRepository
+    public class TeachersRepository : ITeachersRepository
     {
         private readonly IMongoCollection<Teacher> _teachers;
         public TeachersRepository(ITaskManagementDatabaseSettings settings, IMongoClient mongoClient)
         {
             IMongoDatabase database = mongoClient.GetDatabase(settings.DatabaseName);
-            _teachers = database.GetCollection<Teacher>(settings.CollectionName);
+            _teachers = database.GetCollection<Teacher>("Teachers");
         }
 
         public Teacher CreateTeacher(TeacherVM teacherVM)

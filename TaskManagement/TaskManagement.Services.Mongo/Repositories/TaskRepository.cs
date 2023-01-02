@@ -14,14 +14,14 @@ namespace TaskManagement.Services.Mongo.Repositories
         public TasksRepository(ITaskManagementDatabaseSettings settings, IMongoClient mongoClient)
         {
             IMongoDatabase database = mongoClient.GetDatabase(settings.DatabaseName);
-            _tasks = database.GetCollection<Data.Models.Task>(settings.CollectionName);
-            _tasksExecution = database.GetCollection<TaskExecution>(settings.CollectionName);
+            _tasks = database.GetCollection<Data.Models.Task>("Tasks");
+            _tasksExecution = database.GetCollection<TaskExecution>("TasksExecution");
         }
 
         public TaskExecution CompleteTask(TaskExecution taskExecution)
         {
             taskExecution.TaskEndDate = DateTime.Now;
-            _tasksExecution.ReplaceOne(s => s.Id == taskExecution.Id, taskExecution);
+            _tasksExecution.ReplaceOne(t => t.Id == taskExecution.Id, taskExecution);
 
             return taskExecution;
         }
@@ -55,9 +55,7 @@ namespace TaskManagement.Services.Mongo.Repositories
                 return taskExecution;
             }
             else
-            {
                 return null;
-            }
         }
 
         public List<Data.Models.Task> GetTasks() => _tasks.Find(task => true).ToList();
@@ -66,13 +64,9 @@ namespace TaskManagement.Services.Mongo.Repositories
         {
             var task = _tasks.Find(t => t.Id == taskId).SingleOrDefault();
             if (task is not null)
-            {
                 return task;
-            }
             else
-            {
                 return null;
-            }
         }
 
         public List<TaskExecution> GetTasksExecution() => _tasksExecution.Find(taskExecution => true).ToList();

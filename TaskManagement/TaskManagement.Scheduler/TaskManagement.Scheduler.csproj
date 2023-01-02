@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskManagement.Business\TaskManagement.Business.csproj" />
-    <ProjectReference Include="..\TaskManagement.Notifier\TaskManagement.Notifier.csproj" />
   </ItemGroup>
 
 </Project>

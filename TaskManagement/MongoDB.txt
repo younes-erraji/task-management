@@ -8,4 +8,4 @@ Password: ocpravlTwTqw5kgB
 Database name: TaskManagementDB
 Collection name: TaskManagementCollection
 
-Connection: mongodb+srv://task-management:<password>@taskmanagementcluster.tf3kovv.mongodb.net/?retryWrites=true&w=majority
+Connection: mongodb+srv://task-management:ocpravlTwTqw5kgB@taskmanagementcluster.tf3kovv.mongodb.net/?retryWrites=true&w=majority

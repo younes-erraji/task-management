@@ -29,7 +29,7 @@ else
 
     builder.Services.AddSingleton<ITaskManagementDatabaseSettings>(s => s.GetRequiredService<IOptions<TaskManagementDatabaseSettings>>().Value);
 
-    builder.Services.AddSingleton<IMongoClient>(s => new MongoClient(configuration.GetValue<string>("TaskManagementDatabaseSettings:ConnectionString")));
+    builder.Services.AddSingleton<IMongoClient>(s => new MongoClient(configuration.GetValue<string>("TaskManagementDatabaseSettings:URI")));
 
     builder.Services.AddScoped<IStudentsRepository, TaskManagement.Services.Mongo.Repositories.StudentsRepository>();
     builder.Services.AddScoped<ITeachersRepository, TaskManagement.Services.Mongo.Repositories.TeachersRepository>();
@@ -38,11 +38,20 @@ else
 
 builder.Services.AddScoped<ITaskManagementService, TaskManagementService>();
 builder.Services.AddScoped<ITaskWorkflow, TaskWorkflow>();
-builder.Services.AddSingleton<ITaskManagementNotifier, TaskManagementNotifier>();
 builder.Services.AddScoped<ITaskScheduler, TaskManagement.Scheduler.TaskScheduler>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllHeaders", b =>
+    {
+        b.AllowAnyOrigin();
+        b.AllowAnyHeader();
+        b.AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options => options.EnableDetailedErrors = true);
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();

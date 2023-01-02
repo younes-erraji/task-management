@@ -10,8 +10,9 @@ namespace TaskManagement.Data.Models
     public class Student
     {
         [Key]
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
+        // [BsonId]
+        // [BsonRepresentation(BsonType.ObjectId)]
+        [BsonElement("studentId")]
         public Guid Id { get; set; } = Guid.NewGuid();
         [Required, StringLength(50)]
         [BsonElement("name")]

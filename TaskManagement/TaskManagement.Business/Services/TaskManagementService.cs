@@ -23,7 +23,7 @@ namespace TaskManagement.Business.Services
             {
                 _studentsRepository.DeleteStudents();
             }
-            else if (task.TableName.Equals("teachers", StringComparison.OrdinalIgnoreCase))
+            else
             {
                 _teachersRepository.DeleteTeachers();
             }

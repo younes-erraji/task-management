@@ -2,8 +2,7 @@
 {
     public interface ITaskManagementDatabaseSettings
     {
-        string CollectionName { get; set; }
-        string ConnectionString { get; set; }
+        string URI { get; set; }
         string DatabaseName { get; set; }
     }
 }

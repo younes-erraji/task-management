@@ -2,7 +2,7 @@
 {
     public interface ITaskManagementNotifier
     {
-        Task StartingTask(Data.Models.Task task);
-        Task EndingTask(Data.Models.Task task);
+        Task StartingTask(Guid taskId);
+        Task EndingTask(Guid taskId);
     }
 }
