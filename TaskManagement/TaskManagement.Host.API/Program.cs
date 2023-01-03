@@ -72,5 +72,5 @@ app.MapControllers();
 
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
-app.MapHub<TaskManagementNotifier>("/task-management");
+app.MapHub<TaskManagementNotifier>("/notification");
 app.Run();

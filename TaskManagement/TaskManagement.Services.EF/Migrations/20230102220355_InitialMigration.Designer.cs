@@ -12,8 +12,8 @@ using TaskManagement.Services.EF;
 namespace TaskManagement.Services.EF.Migrations
 {
     [DbContext(typeof(TaskManagementDBContext))]
-    [Migration("20230101143727_ValidationMigration")]
-    partial class ValidationMigration
+    [Migration("20230102220355_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,11 +73,9 @@ namespace TaskManagement.Services.EF.Migrations
 
             modelBuilder.Entity("TaskManagement.Data.Models.TaskExecution", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("TaskEndDate")
                         .HasColumnType("datetime2");

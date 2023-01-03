@@ -63,7 +63,7 @@ namespace TaskManagement.Services.Mongo.Repositories
 
     public Data.Models.Task GetTask(Guid taskId)
     {
-      var task = _tasks.Find(t => t.Id == taskId).SingleOrDefault();
+      var task = _tasks.Find(t => t.Id == taskId).FirstOrDefault();
       if (task is not null)
         return task;
       else
@@ -71,5 +71,15 @@ namespace TaskManagement.Services.Mongo.Repositories
     }
 
     public List<TaskExecution> GetTasksExecution() => _tasksExecution.Find(taskExecution => true).ToList();
+
+    public TaskExecution GetTaskExecution(Guid taskExecutionId)
+    {
+      return _tasksExecution.Find(taskExecution => taskExecution.Id == taskExecutionId).SingleOrDefault();
+    }
+
+    public TaskExecution GetTaskExecutionByTask(Guid taskId)
+    {
+      return _tasksExecution.Find(task => task.TaskId == taskId).SingleOrDefault();
+    }
   }
 }

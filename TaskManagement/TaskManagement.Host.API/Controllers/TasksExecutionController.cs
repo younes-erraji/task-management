@@ -33,7 +33,6 @@ namespace TaskManagement.Host.API.Controllers
       if (task is not null)
       {
         var taskExecution = _tasksScheduler.Run(task);
-        CompleteTask(taskExecution);
         return Ok(taskExecution);
       }
       else
@@ -42,14 +41,20 @@ namespace TaskManagement.Host.API.Controllers
       }
     }
 
-    [NonAction]
-    public Task CompleteTask(Data.Models.TaskExecution task)
+    [HttpPost("{taskExecutionId}/complete")]
+    public IActionResult CompleteTask(Guid taskExecutionId)
     {
-      return Task.Run(() =>
+      var taskExecution = _tasksExecutionRepository.GetTaskExecution(taskExecutionId);
+      if (taskExecution is not null) {
+        Thread.Sleep(7000);
+        _tasksExecutionRepository.CompleteTask(taskExecution);
+
+        return Ok(taskExecution);
+      }
+      else
       {
-        Thread.Sleep(10000);
-        _tasksExecutionRepository.CompleteTask(task);
-      });
+        return NotFound();
+      }
     }
   }
 }

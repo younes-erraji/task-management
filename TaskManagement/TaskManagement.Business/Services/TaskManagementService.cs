@@ -41,7 +41,7 @@ namespace TaskManagement.Business.Services
       {
         List<Student> students = new List<Student>();
 
-        for (int i = 0; i < 500; i++)
+        for (int i = 0; i < 50; i++)
         {
           Student student = new Student()
           {
@@ -60,7 +60,7 @@ namespace TaskManagement.Business.Services
       {
         List<Teacher> teachers = new List<Teacher>();
 
-        for (int i = 0; i < 500; i++)
+        for (int i = 0; i < 50; i++)
         {
           Teacher teacher = new Teacher()
           {

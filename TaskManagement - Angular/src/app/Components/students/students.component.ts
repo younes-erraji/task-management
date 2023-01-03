@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import { SignalRService } from 'src/app/Services/signal-r.service';
 
 interface Student {
   id: string;
@@ -32,8 +33,27 @@ export class StudentsComponent implements OnInit {
 
   selectedStudent: string = '';
 
-  constructor() {
-    this.getStudents()
+  constructor(public signalRService: SignalRService) {
+    this.getStudents();
+
+    this.signalRService.onStudentsTaskStarted((action:string) => {
+      Swal.fire(
+        `A Task On Students Table Has Been Started!`,
+        action,
+        'success'
+      );
+
+      this.getStudents();
+    });
+    this.signalRService.onStudentsTaskEnd((action:string) => {
+      Swal.fire(
+        `A Task On Students Has Been Completed!`,
+        action,
+        'success'
+      );
+
+      this.getStudents();
+    });
   }
 
   ngOnInit(): void {
@@ -64,8 +84,8 @@ export class StudentsComponent implements OnInit {
 
       this.student = this.emptyStudentObject();
       Swal.fire(
-        'Student',
         'Student was Successfully Inserted.',
+        '',
         'success'
       );
 
@@ -78,7 +98,7 @@ export class StudentsComponent implements OnInit {
       ...this.studentToUpdate
     }).then(({data}) => {
       Swal.fire(
-        'Student was Successfully DELETED!',
+        'Student was Successfully UPDATED!',
         '',
         'warning'
       );

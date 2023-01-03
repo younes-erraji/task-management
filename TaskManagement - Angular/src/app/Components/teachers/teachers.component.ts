@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import { SignalRService } from 'src/app/Services/signal-r.service';
 
 interface Teacher {
   id: string;
@@ -32,8 +33,27 @@ export class TeachersComponent {
 
   selectedTeacher: string = '';
 
-  constructor() {
-    this.getTeachers()
+  constructor(public signalRService: SignalRService) {
+    this.getTeachers();
+
+    this.signalRService.onTeachersTaskStarted((action:string) => {
+      Swal.fire(
+        `A Task On Teachers Has Been Started!`,
+        action,
+        'success'
+      );
+
+      this.getTeachers();
+    });
+    this.signalRService.onTeachersTaskEnd((action:string) => {
+      Swal.fire(
+        `A Task On Teachers Has Been Completed!`,
+        action,
+        'success'
+      );
+
+      this.getTeachers();
+    });
   }
 
   getTeachers() {
@@ -75,7 +95,7 @@ export class TeachersComponent {
       ...this.teacherToUpdate
     }).then(({data}) => {
       Swal.fire(
-        'Teacher was Successfully DELETED!',
+        'Teacher was Successfully Updated!',
         '',
         'warning'
       );

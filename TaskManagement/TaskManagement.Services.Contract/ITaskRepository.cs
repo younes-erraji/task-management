@@ -8,6 +8,8 @@ namespace TaskManagement.Services.Contract
         List<Data.Models.Task> GetTasks();
         Data.Models.Task GetTask(Guid taskId);
         List<TaskExecution> GetTasksExecution();
+        TaskExecution GetTaskExecution(Guid taskExecutionId);
+        TaskExecution GetTaskExecutionByTask(Guid taskId);
 
         Data.Models.Task CreateTask(TaskVM taskVM);
         TaskExecution ExecuteTask(Data.Models.Task task);

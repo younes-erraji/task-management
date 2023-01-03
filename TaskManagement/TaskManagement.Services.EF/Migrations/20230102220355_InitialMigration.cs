@@ -57,8 +57,7 @@ namespace TaskManagement.Services.EF.Migrations
                 name: "TasksExecution",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TaskId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TaskStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TaskEndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
