@@ -7,79 +7,79 @@ using TaskManagement.Services.Mongo.Settings;
 
 namespace TaskManagement.Services.Mongo.Repositories
 {
-  public class TasksRepository : ITaskRepository
-  {
-    private readonly IMongoCollection<Data.Models.Task> _tasks;
-    private readonly IMongoCollection<TaskExecution> _tasksExecution;
-    public TasksRepository(ITaskManagementDatabaseSettings settings, IMongoClient mongoClient)
+    public class TasksRepository : ITaskRepository
     {
-      IMongoDatabase database = mongoClient.GetDatabase(settings.DatabaseName);
-      _tasks = database.GetCollection<Data.Models.Task>("Tasks");
-      _tasksExecution = database.GetCollection<TaskExecution>("TasksExecution");
-    }
-
-    public TaskExecution CompleteTask(TaskExecution taskExecution)
-    {
-      taskExecution.TaskEndDate = DateTime.Now;
-      _tasksExecution.ReplaceOne(t => t.Id == taskExecution.Id, taskExecution);
-
-      return taskExecution;
-    }
-
-    public Data.Models.Task CreateTask(TaskVM taskVM)
-    {
-      Data.Models.Task task = new()
-      {
-        Name = $"{taskVM.ActionType} data from the {taskVM.TableName} table",
-        ActionType = taskVM.ActionType,
-        TableName = taskVM.TableName,
-      };
-
-      _tasks.InsertOne(task);
-
-      return task;
-    }
-
-    public TaskExecution ExecuteTask(Data.Models.Task task)
-    {
-      if (task is not null)
-      {
-        TaskExecution taskExecution = new TaskExecution
+        private readonly IMongoCollection<Data.Models.Task> _tasks;
+        private readonly IMongoCollection<TaskExecution> _tasksExecution;
+        public TasksRepository(ITaskManagementDatabaseSettings settings, IMongoClient mongoClient)
         {
-          TaskId = task.Id,
-          Task = task,
-          TaskStartDate = DateTime.Now,
-        };
+            IMongoDatabase database = mongoClient.GetDatabase(settings.DatabaseName);
+            _tasks = database.GetCollection<Data.Models.Task>("Tasks");
+            _tasksExecution = database.GetCollection<TaskExecution>("TasksExecution");
+        }
 
-        _tasksExecution.InsertOne(taskExecution);
+        public TaskExecution CompleteTask(TaskExecution taskExecution)
+        {
+            taskExecution.TaskEndDate = DateTime.Now;
+            _tasksExecution.ReplaceOne(t => t.Id == taskExecution.Id, taskExecution);
 
-        return taskExecution;
-      }
-      else
-        return null;
+            return taskExecution;
+        }
+
+        public Data.Models.Task CreateTask(TaskVM taskVM)
+        {
+            Data.Models.Task task = new()
+            {
+                Name = $"{taskVM.ActionType} data from the {taskVM.TableName} table",
+                ActionType = taskVM.ActionType,
+                TableName = taskVM.TableName,
+            };
+
+            _tasks.InsertOne(task);
+
+            return task;
+        }
+
+        public TaskExecution ExecuteTask(Data.Models.Task task)
+        {
+            if (task is not null)
+            {
+                TaskExecution taskExecution = new TaskExecution
+                {
+                    TaskId = task.Id,
+                    Task = task,
+                    TaskStartDate = DateTime.Now,
+                };
+
+                _tasksExecution.InsertOne(taskExecution);
+
+                return taskExecution;
+            }
+            else
+                return null;
+        }
+
+        public List<Data.Models.Task> GetTasks() => _tasks.Find(task => true).ToList();
+
+        public Data.Models.Task GetTask(Guid taskId)
+        {
+            var task = _tasks.Find(t => t.Id == taskId).FirstOrDefault();
+            if (task is not null)
+                return task;
+            else
+                return null;
+        }
+
+        public List<TaskExecution> GetTasksExecution() => _tasksExecution.Find(taskExecution => true).ToList();
+
+        public TaskExecution GetTaskExecution(Guid taskExecutionId)
+        {
+            return _tasksExecution.Find(taskExecution => taskExecution.Id == taskExecutionId).FirstOrDefault();
+        }
+
+        public TaskExecution GetTaskExecutionByTask(Guid taskId)
+        {
+            return _tasksExecution.Find(task => task.TaskId == taskId).FirstOrDefault();
+        }
     }
-
-    public List<Data.Models.Task> GetTasks() => _tasks.Find(task => true).ToList();
-
-    public Data.Models.Task GetTask(Guid taskId)
-    {
-      var task = _tasks.Find(t => t.Id == taskId).FirstOrDefault();
-      if (task is not null)
-        return task;
-      else
-        return null;
-    }
-
-    public List<TaskExecution> GetTasksExecution() => _tasksExecution.Find(taskExecution => true).ToList();
-
-    public TaskExecution GetTaskExecution(Guid taskExecutionId)
-    {
-      return _tasksExecution.Find(taskExecution => taskExecution.Id == taskExecutionId).SingleOrDefault();
-    }
-
-    public TaskExecution GetTaskExecutionByTask(Guid taskId)
-    {
-      return _tasksExecution.Find(task => task.TaskId == taskId).SingleOrDefault();
-    }
-  }
 }

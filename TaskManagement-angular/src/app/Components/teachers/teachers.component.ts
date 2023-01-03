@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { SignalRService } from 'src/app/Services/signal-r.service';
+import { environment } from 'src/environments/environment';
 
 interface Teacher {
   id: string;
@@ -57,7 +58,7 @@ export class TeachersComponent {
   }
 
   getTeachers() {
-    axios.get('https://localhost:7240/api/Teachers').then(({data}) => {
+    axios.get(`${environment.root}/Teachers`).then(({data}) => {
       this.teachers = [];
       data.forEach((s:Teacher) => {
         this.teachers.push(s)
@@ -75,7 +76,7 @@ export class TeachersComponent {
   }
 
   addTeacher(e: any) {
-    axios.post('https://localhost:7240/api/Teachers/insert', {
+    axios.post(`${environment.root}/Teachers/insert`, {
       ...this.teacher
     }).then((response:any) => response.data).then((data:any) => {
 
@@ -91,7 +92,7 @@ export class TeachersComponent {
   }
 
   updateTeacher(e: any) {
-    axios.put(`https://localhost:7240/api/Teachers/${this.teacherToUpdate.id}/edit`, {
+    axios.put(`${environment.root}/Teachers/${this.teacherToUpdate.id}/edit`, {
       ...this.teacherToUpdate
     }).then(({data}) => {
       Swal.fire(
@@ -113,7 +114,7 @@ export class TeachersComponent {
       denyButtonText: `Don't save`,
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`https://localhost:7240/api/Teachers/${id}/delete`)
+        axios.delete(`${environment.root}/Teachers/${id}/delete`)
           .then(({data}) => {
             Swal.fire(
               'Teacher was Successfully DELETED!',
@@ -129,7 +130,7 @@ export class TeachersComponent {
   }
 
   getTeacher(id: string):Teacher|any {
-    axios.get(`https://localhost:7240/api/Teachers/${id}/get`)
+    axios.get(`${environment.root}/Teachers/${id}/get`)
     .then(({data}) => {
       console.log(data)
       this.teacherToUpdate = data

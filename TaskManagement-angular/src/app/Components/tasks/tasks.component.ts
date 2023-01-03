@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { SignalRService } from '../../Services/signal-r.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-tasks',
@@ -22,7 +23,7 @@ export class TasksComponent {
 
   getTasks() {
     axios
-      .get('https://localhost:7240/api/Tasks')
+      .get(`${environment.root}/Tasks`)
       .then(({ data }) => {
         this.tasks = [];
         data.forEach((task: any) => {
@@ -34,7 +35,7 @@ export class TasksComponent {
 
   getTasksExecution() {
     axios
-      .get('https://localhost:7240/api/TasksExecution')
+      .get(`${environment.root}/TasksExecution`)
       .then(({ data }) => {
         this.tasksExecution = [];
         data.forEach((task: any) => {
@@ -46,7 +47,7 @@ export class TasksComponent {
 
   addTask(e: any) {
     axios
-      .post('https://localhost:7240/api/Tasks/insert', {
+      .post(`${environment.root}/Tasks/insert`, {
         tableName: this.tableName,
         actionType: this.actionType,
       })
@@ -60,13 +61,13 @@ export class TasksComponent {
 
   executeTask(id: string) {
     axios
-      .post(`https://localhost:7240/api/TasksExecution/${id}/execute`)
+      .post(`${environment.root}/TasksExecution/${id}/execute`)
       .then(({ data }) => {
         // Fire TaskStarted
         this.signalRService.invokeStartingTask(data.taskId);
         this.getTasksExecution();
         axios
-          .post(`https://localhost:7240/api/TasksExecution/${data.id}/complete`)
+          .post(`${environment.root}/TasksExecution/${data.id}/complete`)
           .then((response: any) => {
             // Fire TaskEnd
             this.signalRService.invokeEndingTask(response.data.taskId);

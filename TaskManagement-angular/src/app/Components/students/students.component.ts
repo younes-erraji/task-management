@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { SignalRService } from 'src/app/Services/signal-r.service';
+import { environment } from 'src/environments/environment';
 
 interface Student {
   id: string;
@@ -60,7 +61,7 @@ export class StudentsComponent implements OnInit {
   }
 
   getStudents() {
-    axios.get('https://localhost:7240/api/Students').then(({data}) => {
+    axios.get(`${environment.root}/Students`).then(({data}) => {
       this.students = [];
       data.forEach((s:Student) => {
         this.students.push(s)
@@ -78,7 +79,7 @@ export class StudentsComponent implements OnInit {
   }
 
   addStudent(e: any) {
-    axios.post('https://localhost:7240/api/Students/insert', {
+    axios.post(`${environment.root}/Students/insert`, {
       ...this.student
     }).then((response:any) => response.data).then((data:any) => {
 
@@ -94,7 +95,7 @@ export class StudentsComponent implements OnInit {
   }
 
   updateStudent(e: any) {
-    axios.put(`https://localhost:7240/api/Students/${this.studentToUpdate.id}/edit`, {
+    axios.put(`${environment.root}/Students/${this.studentToUpdate.id}/edit`, {
       ...this.studentToUpdate
     }).then(({data}) => {
       Swal.fire(
@@ -117,7 +118,7 @@ export class StudentsComponent implements OnInit {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        axios.delete(`https://localhost:7240/api/Students/${id}/delete`)
+        axios.delete(`${environment.root}/Students/${id}/delete`)
           .then(({data}) => {
             Swal.fire(
               'Student was Successfully DELETED!',
@@ -133,7 +134,7 @@ export class StudentsComponent implements OnInit {
   }
 
   getStudent(id: string):Student|any {
-    axios.get(`https://localhost:7240/api/Students/${id}/get`)
+    axios.get(`${environment.root}/Students/${id}/get`)
     .then(({data}) => {
       this.studentToUpdate = data
     }).catch(error => console.log(error))
